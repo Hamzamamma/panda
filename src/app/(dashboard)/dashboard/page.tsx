@@ -15,7 +15,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { getDashboardStats } from "@/features/analytics/actions";
+import { getDashboardStats, getGraphRevenue } from "@/features/analytics/actions";
 import { getProducts } from "@/features/products/actions";
 import { DashboardStatsSkeleton } from "@/components/skeletons/dashboard-stats-skeleton";
 
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
 }
 
 async function DashboardContent() {
-  const stats = await getDashboardStats();
+  const [stats, graphData] = await Promise.all([getDashboardStats(), getGraphRevenue()]);
   const { products } = await getProducts();
   const displayProducts = products?.slice(0, 5) || [];
 
@@ -168,7 +168,7 @@ async function DashboardContent() {
             {" "}
             <Overview
               data={
-                stats.graphData || [
+                graphData.length > 0 ? graphData : [
                   { name: "Jan", total: 1200 },
                   { name: "Feb", total: 900 },
                   { name: "Mar", total: 1500 },
