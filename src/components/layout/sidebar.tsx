@@ -2,15 +2,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, DollarSign, Shirt, Tag, Star, BarChart2, Settings, ChevronDown, ExternalLink } from "lucide-react";
+import {
+  Home,
+  DollarSign,
+  Shirt,
+  Tag,
+  Star,
+  LayoutTemplate,
+  BarChart2,
+  Grid,
+  Settings,
+  ChevronDown,
+  ExternalLink
+} from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Orders", href: "/orders", icon: DollarSign },
   { name: "Products", href: "/products", icon: Shirt },
-  { name: "Marketing", href: "/marketing/newsletter", icon: Tag },
-  { name: "Memberships", href: "/dashboard/memberships", icon: Star },
-  { name: "Finances", href: "/finances", icon: BarChart2 },
+  { name: "Promotions", href: "/promotions", icon: Tag },
+  { name: "Memberships", href: "/memberships", icon: Star },
+  { name: "Site design", href: "/site-design", icon: LayoutTemplate },
+  { name: "Analytics", href: "/analytics", icon: BarChart2 },
+  { name: "Apps", href: "/apps", icon: Grid },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
@@ -18,44 +32,53 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 border-r-2 border-fwBlack bg-white flex-col hidden md:flex h-screen sticky top-0">
-      <div className="h-20 flex items-center px-4 border-b-2 border-fwBlack">
+    <aside className="w-64 border-r-2 border-fwBlack bg-white flex-col hidden md:flex h-screen fixed top-0 left-0 z-40">
+      {/* Sidebar Header */}
+      <div className="h-16 flex items-center px-4 border-b-2 border-fwBlack">
         <div className="flex items-center gap-3 w-full">
           <div className="w-8 h-8 bg-fwBlack text-white flex items-center justify-center rounded-lg rotate-3 shadow-sm">
             <span className="font-display text-xl font-bold">P</span>
           </div>
-          <span className="font-display font-bold text-lg tracking-tight">PANDA</span>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1 text-sm font-bold truncate max-w-[120px]">
+              panda-store
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Live</span>
+            </div>
+          </div>
+          <ChevronDown className="w-4 h-4 text-fwBlack ml-auto cursor-pointer hover:text-fwPurple transition-colors" />
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-2">
         {navigation.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all border-2 ${
+              className={
                 isActive
-                  ? "bg-fwBlack text-white border-fwBlack shadow-comic-sm translate-x-[2px] translate-y-[2px]"
-                  : "text-gray-600 border-transparent hover:bg-fwGray hover:border-fwBlack hover:text-fwBlack"
-              }`}
+                  ? "flex items-center gap-3 px-3 py-2.5 text-sm font-bold bg-fwBlack text-white rounded-xl shadow-comic-sm transform translate-x-[-2px] translate-y-[-2px] transition-all"
+                  : "flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-gray-500 hover:bg-fwGray hover:text-fwBlack rounded-xl transition-all hover:translate-x-1"
+              }
             >
-              <item.icon className={`w-5 h-5 ${isActive ? "text-fwPurple" : ""}`} />
-              <span className="font-bold text-sm">{item.name}</span>
+              <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+              {item.name}
             </Link>
           );
         })}
-      </div>
+      </nav>
 
-      <div className="p-4 border-t-2 border-fwBlack bg-fwGray">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-fwPurple border-2 border-fwBlack"></div>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-xs font-bold truncate">Hamza Creator</p>
-            <p className="text-[10px] text-gray-500 truncate">hamza@panda.com</p>
-          </div>
-          <Settings className="w-4 h-4 cursor-pointer hover:text-fwPurple transition-colors" />
+      {/* Sidebar Footer */}
+      <div className="p-4 border-t-2 border-fwBlack bg-gray-50">
+        <div className="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-widest">Your Shop</div>
+        <div className="bg-white border-2 border-fwBlack p-3 rounded-xl shadow-comic-sm flex items-center justify-between cursor-pointer hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all group">
+          <span className="text-sm font-bold text-fwBlack">Visit Shop</span>
+          <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-fwPurple transition-colors" />
         </div>
       </div>
     </aside>
